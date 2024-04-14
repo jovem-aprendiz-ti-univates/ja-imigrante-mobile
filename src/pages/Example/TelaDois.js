@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 
 export default function TelaDois() {
@@ -14,7 +13,6 @@ export default function TelaDois() {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="green" />
       <Image
         style={styles.logo}
         source={{
