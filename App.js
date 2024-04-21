@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native'; // Importe o NavigationContainer
+import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TelaUm from './src/pages/Example/TelaUm';
 import TelaDois from './src/pages/Example/TelaDois';
 import Home from './src/pages/Home/Home';
-import UserList from './src/pages/Users/UserList';
+// import UserList from './src/pages/Users/UserList';
 import UserListModal from './src/pages/Users/UserListModal';
+import UsersAula from './src/pages/Users/UsersAula';
+import UsersRegistration from './src/pages/Users/UsersRegistration';
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +51,7 @@ export default function App() {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="UsersList"
           component={UserList}
           options={{
@@ -58,7 +60,7 @@ export default function App() {
               <MaterialCommunityIcons name="account-group" color={color} size={size} />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="UsersListModal"
           component={UserListModal}
@@ -66,6 +68,16 @@ export default function App() {
             tabBarLabel: 'Users Modal',
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="account-group" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="UsersRegistration"
+          component={UsersRegistration}
+          options={{
+            tabBarLabel: 'Users Register',
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons name="account-plus" color={color} size={size} />
             ),
           }}
         />

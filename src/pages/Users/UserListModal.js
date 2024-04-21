@@ -12,7 +12,7 @@ export default function UserListModal() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/users');
+            const response = await fetch('http://192.168.0.123:8000/usuarios');
             const result = await response.json();
             setData(result);
         } catch (error) {
@@ -23,7 +23,7 @@ export default function UserListModal() {
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => { setSelectedUser(item); setModalVisible(true); }}>
             <View style={styles.item}>
-                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.nome}>{item.nome}</Text>
                 <Text style={styles.email}>{item.email}</Text>
             </View>
         </TouchableOpacity>
@@ -50,14 +50,7 @@ export default function UserListModal() {
                         {selectedUser && (
                             <View>
                                 <Text style={styles.modalText}><Text style={styles.bold}>Name:</Text> {selectedUser.name}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Username:</Text> {selectedUser.username}</Text>
                                 <Text style={styles.modalText}><Text style={styles.bold}>Email:</Text> {selectedUser.email}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Phone:</Text> {selectedUser.phone}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Website:</Text> {selectedUser.website}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Address:</Text> {selectedUser.address.street}, {selectedUser.address.suite}, {selectedUser.address.city}, {selectedUser.address.zipcode}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Company:</Text> {selectedUser.company.name}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Catch Phrase:</Text> {selectedUser.company.catchPhrase}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>BS:</Text> {selectedUser.company.bs}</Text>
                                 <TouchableOpacity onPress={() => setModalVisible(false)}>
                                     <Text style={styles.closeButton}>Close</Text>
                                 </TouchableOpacity>
