@@ -6,8 +6,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import TelaUm from './src/pages/Example/TelaUm';
 import TelaDois from './src/pages/Example/TelaDois';
 import Home from './src/pages/Home/Home';
-// import UserList from './src/pages/Users/UserList';
-import UserListModal from './src/pages/Users/UserListModal';
+import UserList from './src/pages/Users/UserList';
+// import UserListModal from './src/pages/Users/UserListModal';
 import UsersAula from './src/pages/Users/UsersAula';
 import UsersRegistration from './src/pages/Users/UsersRegistration';
 
@@ -51,7 +51,7 @@ export default function App() {
             ),
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="UsersList"
           component={UserList}
           options={{
@@ -60,8 +60,8 @@ export default function App() {
               <MaterialCommunityIcons name="account-group" color={color} size={size} />
             ),
           }}
-        /> */}
-        <Tab.Screen
+        />
+        {/* <Tab.Screen
           name="UsersListModal"
           component={UserListModal}
           options={{
@@ -70,7 +70,7 @@ export default function App() {
               <MaterialCommunityIcons name="account-group" color={color} size={size} />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="UsersRegistration"
           component={UsersRegistration}

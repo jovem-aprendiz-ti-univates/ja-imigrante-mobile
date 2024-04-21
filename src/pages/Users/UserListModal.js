@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlatList, Text, View, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { FlatList, Text, View, StyleSheet, TouchableOpacity, Modal, Alert } from 'react-native';
 
 export default function UserListModal() {
     const [data, setData] = useState([]);
@@ -12,19 +12,44 @@ export default function UserListModal() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://192.168.0.123:8000/usuarios');
+            const response = await fetch(`http://${API_URL}/usuarios`);
             const result = await response.json();
             setData(result);
         } catch (error) {
-            console.log(`Error fetching data: ${error}`)
+            console.log(`Error fetching data: ${error}`);
         }
-    }
+    };
+
+    const deleteUser = async (id) => {
+        try {
+            const response = await fetch(`http://${API_URL}/usuarios/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                Alert.alert('Success', 'User deleted successfully');
+                await fetchData(); // atualiza a listagem
+            } else {
+                throw new Error('Error deleting user');
+            }
+        } catch (error) {
+            console.error(`Error deleting user: ${error}`);
+            Alert.alert('Error', 'Failed to delete user');
+        }
+    };
 
     const renderItem = ({ item }) => (
         <TouchableOpacity onPress={() => { setSelectedUser(item); setModalVisible(true); }}>
             <View style={styles.item}>
-                <Text style={styles.nome}>{item.nome}</Text>
+                <Text style={styles.name}>{item.nome}</Text>
                 <Text style={styles.email}>{item.email}</Text>
+
+                <TouchableOpacity 
+                    onPress={() => deleteUser(item.id)} 
+                    style={styles.deleteButton}
+                >
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                </TouchableOpacity>
             </View>
         </TouchableOpacity>
     );
@@ -37,6 +62,7 @@ export default function UserListModal() {
                 renderItem={renderItem}
                 contentContainerStyle={styles.listContainer}
             />
+            
             <Modal
                 animationType="slide"
                 transparent={true}
@@ -49,8 +75,12 @@ export default function UserListModal() {
                     <View style={styles.modalContent}>
                         {selectedUser && (
                             <View>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Name:</Text> {selectedUser.name}</Text>
-                                <Text style={styles.modalText}><Text style={styles.bold}>Email:</Text> {selectedUser.email}</Text>
+                                <Text style={styles.modalText}>
+                                    <Text style={styles.bold}>Name:</Text> {selectedUser.nome}
+                                </Text>
+                                <Text style={styles.modalText}>
+                                    <Text style={styles.bold}>Email:</Text> {selectedUser.email}
+                                </Text>
                                 <TouchableOpacity onPress={() => setModalVisible(false)}>
                                     <Text style={styles.closeButton}>Close</Text>
                                 </TouchableOpacity>
@@ -60,7 +90,7 @@ export default function UserListModal() {
                 </View>
             </Modal>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -76,6 +106,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
         borderRadius: 8,
         elevation: 3,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     name: {
         fontSize: 18,
@@ -84,6 +117,15 @@ const styles = StyleSheet.create({
     email: {
         fontSize: 14,
         color: '#666',
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderRadius: 4,
+        padding: 6,
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
     listContainer: {
         paddingTop: 10,

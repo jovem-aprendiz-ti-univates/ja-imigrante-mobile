@@ -1,43 +1,38 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Alert,
-} from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
+import { API_URL } from '@env';
 
 export default function UserRegistration() {
-  const [name, setName] = useState('');
+  const [nome, setName] = useState('');
   const [email, setEmail] = useState('');
 
-  const handleRegistration = () => {
+  const handleRegistration = async () => {
     const user = {
       nome,
       email,
     };
 
-    fetch('http://192.168.0.123:8000/usuarios', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(user),
-    })
-      .then((response) => {
-        if (response.ok) {
-          Alert.alert('Success', 'User registered successfully!');
-          setName('');
-          setEmail('');
-        } else {
-          throw new Error('Error during registration');
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        Alert.alert('Error', 'Failed to register the user');
+    try {
+      const response = await fetch(`http://${API_URL}/usuarios`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
       });
+
+      if (response.ok) {
+        Alert.alert('Success', 'User registered successfully!');
+        setName('');
+        setEmail('');
+      } else {
+        const errorData = await response.json();
+        throw new Error(`Registration error: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', `Failed to register the user: ${error.message}`);
+    }
   };
 
   return (
@@ -45,7 +40,7 @@ export default function UserRegistration() {
       <Text style={styles.label}>Name:</Text>
       <TextInput
         style={styles.input}
-        value={name}
+        value={nome}
         onChangeText={setName}
       />
 
