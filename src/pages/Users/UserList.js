@@ -3,7 +3,7 @@ import { FlatList, Text, View, StyleSheet, TouchableOpacity, Alert } from 'react
 import { API_URL } from '@env';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function UserList() {
+export default function UserList({ navigation }) {
     const [data, setData] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -14,6 +14,7 @@ export default function UserList() {
     );
 
     const fetchData = async () => {
+        console.log(API_URL);
         try {
             setRefreshing(true); // Indica que a atualização está em andamento
             const response = await fetch(`http://${API_URL}/usuarios`);
@@ -44,18 +45,31 @@ export default function UserList() {
         }
     };
 
+    const navigateToEdit = (userId) => {
+        // Navega para a tela de edição passando o ID do usuário como parâmetro
+        navigation.navigate('UserEdit', { userId });
+    };
+
     const renderItem = ({ item }) => (
         <View style={styles.item}>
             <View style={styles.itemContent}>
                 <Text style={styles.name}>{item.nome}</Text>
                 <Text style={styles.email}>{item.email}</Text>
             </View>
-            <TouchableOpacity
-                onPress={() => deleteUser(item.id)}
-                style={styles.deleteButton}
-            >
-                <Text style={styles.deleteButtonText}>Delete</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={() => navigateToEdit(item.id)}
+                    style={styles.editButton}
+                >
+                    <Text style={styles.editButtonText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => deleteUser(item.id)}
+                    style={styles.deleteButton}
+                >
+                    <Text style={styles.deleteButtonText}>Delete</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 
@@ -92,6 +106,7 @@ const styles = StyleSheet.create({
     },
     itemContent: {
         flexDirection: 'column',
+        flex: 1, // Adicionado para ocupar o espaço restante
     },
     name: {
         fontSize: 18,
@@ -100,6 +115,19 @@ const styles = StyleSheet.create({
     email: {
         fontSize: 14,
         color: '#666666',
+    },
+    buttonContainer: {
+        flexDirection: 'row', // Adicionado para alinhar os botões horizontalmente
+    },
+    editButton: {
+        backgroundColor: 'blue',
+        borderRadius: 4,
+        padding: 6,
+        marginRight: 10,
+    },
+    editButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
     deleteButton: {
         backgroundColor: 'red',

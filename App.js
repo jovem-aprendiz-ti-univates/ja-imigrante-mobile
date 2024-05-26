@@ -2,25 +2,47 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import TelaUm from './src/pages/Example/TelaUm';
 import TelaDois from './src/pages/Example/TelaDois';
 import Home from './src/pages/Home/Home';
 import UserList from './src/pages/Users/UserList';
+import UserEdit from './src/pages/Users/UserEdit';
 // import UserListModal from './src/pages/Users/UserListModal';
-import UsersAula from './src/pages/Users/UsersAula';
+// import UsersAula from './src/pages/Users/UsersAula';
 import UsersRegistration from './src/pages/Users/UsersRegistration';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+function UsersStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="UserList" 
+        component={UserList} 
+        options={{ title: 'Users List', headerShown: false }} // Oculta o cabeçalho
+      />
+      <Stack.Screen 
+        name="UserEdit" 
+        component={UserEdit} 
+        options={{ title: 'Edit User', headerShown: false }} // Oculta o cabeçalho
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="lightblue" />
+
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false // Esconde o cabeçalho em todas as páginas
         })}>
+        
         <Tab.Screen
           name="Home"
           component={Home}
@@ -51,9 +73,9 @@ export default function App() {
             ),
           }}
         />
-        <Tab.Screen
-          name="UsersList"
-          component={UserList}
+         <Tab.Screen
+          name="UserStack"
+          component={UsersStack}
           options={{
             tabBarLabel: 'Users',
             tabBarIcon: ({ color, size }) => (
@@ -61,16 +83,6 @@ export default function App() {
             ),
           }}
         />
-        {/* <Tab.Screen
-          name="UsersListModal"
-          component={UserListModal}
-          options={{
-            tabBarLabel: 'Users Modal',
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="account-group" color={color} size={size} />
-            ),
-          }}
-        /> */}
         <Tab.Screen
           name="UsersRegistration"
           component={UsersRegistration}
@@ -81,6 +93,7 @@ export default function App() {
             ),
           }}
         />
+       
       </Tab.Navigator>
     </NavigationContainer>
   );
